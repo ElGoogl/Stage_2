@@ -8,9 +8,12 @@
         <outputRelativeToContentRoot value="true" />
         <module name="control-service" />
         <module name="crawler-service" />
-        <module name="indexing_service" />
+        <module name="indexin_service" />
         <module name="ingestion_service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="indexing_service" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>
