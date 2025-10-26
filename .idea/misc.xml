@@ -8,10 +8,17 @@
         <option value="$PROJECT_DIR$/control_module/pom.xml" />
         <option value="$PROJECT_DIR$/indexing_service/pom.xml" />
         <option value="$PROJECT_DIR$/indexin_service/pom.xml" />
+        <option value="$PROJECT_DIR$/../hausarbeit_i143_2025_i23c_c5/pom.xml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/../hausarbeit_i143_2025_i23c_c5/pom.xml" />
+      </set>
+    </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_24" default="true" project-jdk-name="openjdk-24" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="corretto-17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

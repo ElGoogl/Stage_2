@@ -13,6 +13,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="hausarbeit_i143_2025_i23c_c5" target="17" />
       <module name="indexing_service" target="1.5" />
     </bytecodeTargetLevel>
   </component>
