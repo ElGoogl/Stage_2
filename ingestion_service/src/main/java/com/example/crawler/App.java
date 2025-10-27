@@ -12,7 +12,7 @@ import java.util.*;
 public class App {
     private static final Gson gson = new Gson();
     private static final Path DATA_DIR = Paths.get(
-            System.getProperty("dataRepo", "ingestion_service/data_repository/datalake_v1")
+            System.getProperty("dataRepo", "data_repository/datalake_v1")
     );
 
 

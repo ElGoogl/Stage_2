@@ -51,21 +51,57 @@ public class App {
             ctx.result(result);
         });
 
-        // Start whole pipeline
+        // start whole pipeline (ingestion + indexing)
         app.post("/control/pipeline/{id}", ctx -> {
             int bookId = Integer.parseInt(ctx.pathParam("id"));
             System.out.println("[CONTROL] Starting pipeline for book " + bookId);
 
-            String ingest = sendRequest(INGEST_URL + bookId, "POST");
-            System.out.println("[CONTROL] Ingest complete for book " + bookId);
+            // Ingestion phase
+            String statusJson = sendRequest(INGEST_URL + "status/" + bookId, "GET");
+            Map<?, ?> status = gson.fromJson(statusJson, Map.class);
+            boolean alreadyIngested = "available".equals(status.get("status"));
 
-            String index = sendRequest(INDEX_URL + bookId, "POST");
-            System.out.println("[CONTROL] Index complete for book " + bookId);
+            String ingestResult;
+            if (!alreadyIngested) {
+                System.out.println("[CONTROL] Book not yet ingested, starting ingestion...");
+                ingestResult = sendRequest(INGEST_URL + bookId, "POST");
+            } else {
+                System.out.println("[CONTROL] Book already ingested, skipping download.");
+                ingestResult = gson.toJson(Map.of("status", "skipped"));
+            }
+
+            // verify ingestion completion
+            boolean ready = false;
+            for (int i = 0; i < 10; i++) {
+                String check = sendRequest(INGEST_URL + "status/" + bookId, "GET");
+                if (check.contains("available")) { ready = true; break; }
+                Thread.sleep(1000);
+            }
+
+            // indexing phase
+            String indexResult;
+            if (ready) {
+                // 💡 Check index status before starting
+                String indexStatusJson = sendRequest("http://localhost:7002/index/status/" + bookId, "GET");
+                Map<?, ?> indexStatus = gson.fromJson(indexStatusJson, Map.class);
+                boolean alreadyIndexed = "indexed".equals(indexStatus.get("status"));
+
+                if (alreadyIndexed) {
+                    System.out.println("[CONTROL] Book already indexed, skipping indexing.");
+                    indexResult = gson.toJson(Map.of("status", "skipped"));
+                } else {
+                    System.out.println("[CONTROL] Ingestion confirmed. Starting indexing...");
+                    indexResult = sendRequest(INDEX_URL + bookId, "POST");
+                    System.out.println("[CONTROL] Indexing confirmed. Pipeline finished.");
+                }
+            } else {
+                indexResult = gson.toJson(Map.of("status", "ingestion_failed"));
+            }
 
             ctx.json(Map.of(
                     "book_id", bookId,
-                    "ingest", gson.fromJson(ingest, Object.class),
-                    "index", gson.fromJson(index, Object.class)
+                    "ingest", gson.fromJson(ingestResult, Object.class),
+                    "index", gson.fromJson(indexResult, Object.class)
             ));
         });
     }
