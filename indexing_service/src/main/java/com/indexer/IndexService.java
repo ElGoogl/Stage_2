@@ -75,6 +75,9 @@ public class IndexService {
                     new TypeToken<Map<String, Object>>() {}.getType()
             );
 
+            Map<String, String> metadata = MetaDataParser.parseMetadata((String) jsonData.get("header"));
+            MetaDataParser.storeMetadata(metadata, id);
+
             // --- Build hierarchical index (logical JSON structure) ---
             Tokenised tokenizer = new Tokenised();
             Map<String, Map<String, List<Map<String, Object>>>> index =
