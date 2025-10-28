@@ -7,15 +7,23 @@ import java.util.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * IndexService builds and manages hierarchical JSON indexes
+ * for books stored in the datalake.
+ */
 public class IndexService {
 
     private static final Gson gson = new Gson();
-    private static final String DATA_PATH = "data_repository/datalake_v1/";
-    private static final Path STATUS_FILE = Paths.get("data_repository/indexed_books.json");
 
-    // indexed status tracker
+    // --- Directory configuration ---
+    private static final String DATA_PATH = "benchmark_datalake/datalake_v1/";
+    private static final Path STATUS_FILE = Paths.get("benchmark_datalake/indexed_books.json");
+    private static final Path INDEX_PATH = Paths.get("benchmark_datalake/indexes/");
+
+    // --- Track which books are already indexed ---
     private static final Set<Integer> indexedBooks = new HashSet<>();
 
+    // --- Static initializer to load previous indexing state ---
     static {
         try {
             if (Files.exists(STATUS_FILE)) {
@@ -33,7 +41,10 @@ public class IndexService {
     }
 
     /**
-     * Builds indexer for book if not present already
+     * Builds an index for a given book if it has not been indexed before.
+     *
+     * @param id the book ID to index
+     * @return JSON-style response map with status information
      */
     public synchronized Map<String, Object> buildIndex(int id) {
         try {
@@ -46,10 +57,13 @@ public class IndexService {
                 );
             }
 
-            // get JSON files from datalake
+            // --- Load JSON from datalake ---
             Path jsonPath = Paths.get(DATA_PATH + id + ".json");
             if (!Files.exists(jsonPath)) {
-                return Map.of("status", "error", "message", "Book JSON not found for id " + id);
+                return Map.of(
+                        "status", "error",
+                        "message", "Book JSON not found for id " + id
+                );
             }
 
             Map<String, Object> jsonData = gson.fromJson(
@@ -57,14 +71,15 @@ public class IndexService {
                     new TypeToken<Map<String, Object>>() {}.getType()
             );
 
+            // --- Build hierarchical index (logical JSON structure) ---
             Map<String, Object> index = createHierarchicalIndex(jsonData);
 
-            // save index file
-            Path indexFile = Paths.get("data_repository/indexes/index_" + id + ".json");
-            Files.createDirectories(indexFile.getParent());
+            // --- Save index JSON ---
+            Files.createDirectories(INDEX_PATH);
+            Path indexFile = INDEX_PATH.resolve("index_" + id + ".json");
             Files.writeString(indexFile, gson.toJson(index));
 
-            // update status
+            // --- Update index status ---
             indexedBooks.add(id);
             saveStatus();
 
@@ -74,22 +89,19 @@ public class IndexService {
                     "status", "indexed",
                     "indexFile", indexFile.toString()
             );
+
         } catch (Exception e) {
             e.printStackTrace();
             return Map.of("status", "error", "message", e.getMessage());
         }
     }
 
-    /**
-     * Check if book is already indexed
-     */
+    /** Checks if a book has already been indexed. */
     public boolean isIndexed(int id) {
         return indexedBooks.contains(id);
     }
 
-    /**
-     * Save indexed status list
-     */
+    /** Saves the list of indexed books persistently as JSON. */
     private void saveStatus() {
         try {
             Files.createDirectories(STATUS_FILE.getParent());
@@ -99,7 +111,10 @@ public class IndexService {
         }
     }
 
-    // Create the hierarchical indexer
+    /**
+     * Recursively builds a hierarchical JSON index structure.
+     * Converts nested maps into a symbolic tree (for demonstration).
+     */
     private Map<String, Object> createHierarchicalIndex(Map<String, Object> json) {
         Map<String, Object> index = new LinkedHashMap<>();
         json.forEach((key, value) -> {

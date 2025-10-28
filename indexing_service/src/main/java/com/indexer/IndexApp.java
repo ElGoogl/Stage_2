@@ -5,7 +5,9 @@ import io.javalin.json.JavalinJackson;
 import java.util.Map;
 
 public class IndexApp {
+
     public static void main(String[] args) {
+        
         Javalin app = Javalin.create(config -> {
             config.jsonMapper(new JavalinJackson());
             config.http.defaultContentType = "application/json";
