@@ -4,6 +4,8 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
+import com.google.gson.GsonBuilder;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -13,10 +15,12 @@ import com.google.gson.reflect.TypeToken;
  */
 public class IndexService {
 
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .create();
 
     // --- Directory configuration ---
-    private static final String DATA_PATH = "benchmark_datalake/datalake_v1/";
+    private static final String DATA_PATH = "benchmark_datalake/";
     private static final Path STATUS_FILE = Paths.get("benchmark_datalake/indexed_books.json");
     private static final Path INDEX_PATH = Paths.get("benchmark_datalake/indexes/");
 
@@ -72,7 +76,10 @@ public class IndexService {
             );
 
             // --- Build hierarchical index (logical JSON structure) ---
-            Map<String, Object> index = createHierarchicalIndex(jsonData);
+            Tokenised tokenizer = new Tokenised();
+            Map<String, Map<String, List<Map<String, Object>>>> index =
+                    tokenizer.buildHierarchicalIndex(jsonData, id);
+
 
             // --- Save index JSON ---
             Files.createDirectories(INDEX_PATH);

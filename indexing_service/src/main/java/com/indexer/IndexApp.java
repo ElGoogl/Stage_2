@@ -15,6 +15,16 @@ public class IndexApp {
 
         System.out.println("[INDEXER] Service started on http://localhost:7002");
 
+        // --- Quick test: build index for one book manually ---
+        IndexService indexService = new IndexService();
+        Map<String, Object> result8 = indexService.buildIndex(9998);
+        Map<String, Object> result9 = indexService.buildIndex(9999);
+        System.out.println(result8);
+        System.out.println(result9);
+
+        GlobalIndexer gi = new GlobalIndexer();
+        gi.buildGlobalIndex();
+
         app.get("/status", ctx -> ctx.json(Map.of(
                 "service", "indexing_service",
                 "status", "running"
