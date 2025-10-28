@@ -22,6 +22,9 @@ public class IndexApp {
         System.out.println(result8);
         System.out.println(result9);
 
+        Map<String, Object> result42 = indexService.buildIndex(1342);
+        System.out.println(result42);
+
         GlobalIndexer gi = new GlobalIndexer();
         gi.buildGlobalIndex();
 

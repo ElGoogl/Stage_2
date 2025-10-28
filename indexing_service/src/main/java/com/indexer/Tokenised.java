@@ -28,13 +28,14 @@ public class Tokenised {
 
         Map<String, Map<String, List<Map<String, Object>>>> hierarchicalIndex = new TreeMap<>();
 
-        Object bodyObj = jsonData.get("body");
-        if (bodyObj == null) {
-            System.out.println("[TOKENISED] No 'body' field found for book " + bookId);
+        Object contentObj = jsonData.get("content");
+        if (contentObj == null) {
+            System.out.println("[TOKENISED] No 'content' field found for book " + bookId);
             return hierarchicalIndex;
         }
 
-        String text = bodyObj.toString().toLowerCase(Locale.ROOT);
+        String text = contentObj.toString().toLowerCase(Locale.ROOT);
+
         String[] tokens = text.split("\\W+");
 
         // --- Count tokens first ---
