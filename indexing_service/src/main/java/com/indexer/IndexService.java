@@ -20,9 +20,10 @@ public class IndexService {
             .create();
 
     // --- Directory configuration ---
-    private static final String DATA_PATH = "benchmark_datalake/";
-    private static final Path STATUS_FILE = Paths.get("benchmark_datalake/indexed_books.json");
-    private static final Path INDEX_PATH = Paths.get("benchmark_datalake/indexes/");
+    private static final String DATA_PATH = "data_repository/datalake_v1/";
+    private static final Path INDEX_PATH = Paths.get("data_repository/indexes/");
+    private static final Path STATUS_FILE = Paths.get("data_repository/indexed_books.json");
+
 
     // --- Track which books are already indexed ---
     private static final Set<Integer> indexedBooks = new HashSet<>();

@@ -17,8 +17,8 @@ import java.util.*;
  */
 public class GlobalIndexer {
 
-    private static final Path INDEX_DIR = Paths.get("benchmark_datalake/indexes/");
-    private static final Path GLOBAL_INDEX_FILE = Paths.get("benchmark_datalake/inverted_index.json");
+    private static final Path INDEX_DIR = Paths.get("data_repository/indexes/");
+    private static final Path GLOBAL_INDEX_FILE = Paths.get("data_repository/inverted_index.json");
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     /**

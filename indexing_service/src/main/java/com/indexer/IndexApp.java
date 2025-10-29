@@ -17,10 +17,6 @@ public class IndexApp {
 
         // --- Quick test: build index for one book manually ---
         IndexService indexService = new IndexService();
-        Map<String, Object> result8 = indexService.buildIndex(9998);
-        Map<String, Object> result9 = indexService.buildIndex(9999);
-        System.out.println(result8);
-        System.out.println(result9);
 
         Map<String, Object> result42 = indexService.buildIndex(1342);
         System.out.println(result42);
