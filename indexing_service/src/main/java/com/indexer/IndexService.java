@@ -137,4 +137,11 @@ public class IndexService {
         });
         return index;
     }
+    /**
+     * Returns the number of books that have already been indexed.
+     * Used by the GET /index/status endpoint in IndexApp.
+     */
+    public int getIndexedCount() {
+        return indexedBooks.size();
+    }
 }
