@@ -42,8 +42,30 @@ public class SearchService {
         // Search in inverted index for content matches
         Set<Integer> matchingBookIds = searchInInvertedIndex(query);
         
-        // Then filter by metadata from database
-        return searchInDatabase(matchingBookIds, author, language, year, query);
+        // Filter by metadata from database
+        List<Book> books = searchInDatabase(matchingBookIds, author, language, year, query);
+        
+        // Apply ranking if we have a query term
+        if (query != null && !query.trim().isEmpty() && !books.isEmpty()) {
+            List<RankedBook> rankedBooks = RankingService.rankBooks(books, query, matchingBookIds);
+            return new ArrayList<>(rankedBooks);
+        }
+        
+        return books;
+    }
+    
+    /**
+     * Search with detailed ranking information
+     */
+    public List<RankedBook> searchWithRanking(String query, String author, String language, Integer year) {
+        Set<Integer> matchingBookIds = searchInInvertedIndex(query);
+        List<Book> books = searchInDatabase(matchingBookIds, author, language, year, query);
+        
+        if (query != null && !query.trim().isEmpty() && !books.isEmpty()) {
+            return RankingService.rankBooks(books, query, matchingBookIds);
+        }
+        
+        return books.stream().map(RankedBook::new).collect(java.util.stream.Collectors.toList());
     }
     
     private Set<Integer> searchInInvertedIndex(String query) {
