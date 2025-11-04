@@ -30,13 +30,14 @@
         <javalin.version>5.6.3</javalin.version>
         <logback.version>1.5.6</logback.version>
         <jackson.version>2.15.0</jackson.version>
+        <gson.version>2.11.0</gson.version>
 
         <junit.version>5.10.2</junit.version>
         <jmh.version>1.37</jmh.version>
     </properties>
 
     <dependencies>
-        <!-- App runtime -->
+        <!-- Runtime -->
         <dependency>
             <groupId>io.javalin</groupId>
             <artifactId>javalin</artifactId>
@@ -52,8 +53,13 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
+        </dependency>
 
-        <!-- JMH for benchmarks shaded into the benchmarks jar -->
+        <!-- JMH for benchmarks -->
         <dependency>
             <groupId>org.openjdk.jmh</groupId>
             <artifactId>jmh-core</artifactId>
@@ -98,7 +104,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Run the app with mvn exec:java if you want -->
+            <!-- Run the app with mvn exec:java -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -156,7 +162,6 @@
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>org.openjdk.jmh.Main</mainClass>
                                 </transformer>
-                                <!-- Needed so the JMH service descriptors are merged -->
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                             </transformers>
                             <filters>
