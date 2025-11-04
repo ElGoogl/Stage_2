@@ -12,6 +12,25 @@ import java.util.regex.Pattern;
 
 public class MetaDataParser{
 
+    // Language code mapping for ISO 639-1 compliance
+    private static final Map<String, String> LANGUAGE_CODES = Map.of(
+        "English", "en",
+        "French", "fr", 
+        "German", "de",
+        "Spanish", "es",
+        "Italian", "it",
+        "Portuguese", "pt",
+        "Dutch", "nl",
+        "Russian", "ru",
+        "Chinese", "zh",
+        "Japanese", "ja"
+    );
+    
+    private static String convertToLanguageCode(String language) {
+        if (language == null) return null;
+        return LANGUAGE_CODES.getOrDefault(language.trim(), language.toLowerCase().trim());
+    }
+
     private class DBUtil {
         private static final String URL = "jdbc:mysql://localhost:3306/metadata_db";
         private static final String USER = "bd";
@@ -31,8 +50,8 @@ public class MetaDataParser{
                 book_id BIGINT PRIMARY KEY,
                 title VARCHAR(512),
                 author VARCHAR(256),
-                language VARCHAR(64),
-                publication_year INT
+                language VARCHAR(8),
+                year INT
             )
         """;
         String sql = """
@@ -41,14 +60,14 @@ public class MetaDataParser{
                 title,
                 author,
                 language,
-                publication_year
+                year
             )
             VALUES (?, ?, ?, ?, ?)
             ON DUPLICATE KEY UPDATE
                 title = VALUES(title),
                 author = VALUES(author),
                 language = VALUES(language),
-                publication_year = VALUES(publication_year)
+                year = VALUES(year)
         """;
 
         try (Connection conn = DBUtil.getConnection()) {
@@ -62,8 +81,8 @@ public class MetaDataParser{
                 stmt.setString(3, metadata.getOrDefault("author", null));
                 stmt.setString(4, metadata.getOrDefault("language", null));
 
-                if (metadata.containsKey("publication_year")) {
-                    stmt.setInt(5, Integer.parseInt(metadata.get("publication_year")));
+                if (metadata.containsKey("year")) {
+                    stmt.setInt(5, Integer.parseInt(metadata.get("year")));
                 } else {
                     stmt.setNull(5, java.sql.Types.INTEGER);
                 }
@@ -98,7 +117,11 @@ public class MetaDataParser{
         if (m.find()) metadata.put("author", m.group(1).trim());
 
         m = languagePattern.matcher(text);
-        if (m.find()) metadata.put("language", m.group(1).trim());
+        if (m.find()) {
+            String language = m.group(1).trim();
+            String languageCode = convertToLanguageCode(language);
+            metadata.put("language", languageCode);
+        }
 
         // Extract year from 'Release date' field only
         m = releaseDatePattern.matcher(text);
@@ -106,7 +129,7 @@ public class MetaDataParser{
             String release = m.group(1).trim();
             Pattern yearPattern = Pattern.compile("(\\d{4})");
             Matcher ym = yearPattern.matcher(release);
-            if (ym.find()) metadata.put("publication_year", ym.group(1));
+            if (ym.find()) metadata.put("year", ym.group(1));
         }
 
         return metadata;

@@ -1,4 +1,4 @@
-package com.example.search;
+package com.bd.search;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,9 +21,9 @@ public class DatabaseConfig {
     }
     
     public static Connection getConnection() throws SQLException {
-        String url = properties.getProperty("db.url", "jdbc:mysql://localhost:3306/searchengine");
-        String username = properties.getProperty("db.username", "root");
-        String password = properties.getProperty("db.password", "password");
+        String url = properties.getProperty("db.url", "jdbc:mysql://localhost:3306/metadata_db");
+        String username = properties.getProperty("db.username", "bd");
+        String password = properties.getProperty("db.password", "bd");
         
         return DriverManager.getConnection(url, username, password);
     }

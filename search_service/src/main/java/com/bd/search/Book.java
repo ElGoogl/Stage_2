@@ -1,4 +1,4 @@
-package com.example.search;
+package com.bd.search;
 
 public class Book {
     private int book_id;

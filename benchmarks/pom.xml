@@ -14,8 +14,7 @@
     </properties>
 
     <dependencies>
-
-        <!-- JMH -->
+        <!-- JMH Core Dependencies -->
         <dependency>
             <groupId>org.openjdk.jmh</groupId>
             <artifactId>jmh-core</artifactId>
@@ -25,12 +24,31 @@
             <groupId>org.openjdk.jmh</groupId>
             <artifactId>jmh-generator-annprocess</artifactId>
             <version>1.37</version>
+            <scope>provided</scope>
         </dependency>
+        
+        <!-- MySQL Driver for Database Access -->
         <dependency>
-            <groupId>com.example</groupId>
-            <artifactId>ingestion_service</artifactId>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
+        
+        <!-- JSON Processing -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+        
+                <!-- Search Service - The actual production code we're benchmarking -->
+        <dependency>
+            <groupId>com.bd</groupId>
+            <artifactId>search-service</artifactId>
             <version>1.0.0</version>
         </dependency>
+        
+
     </dependencies>
 
     <build>
