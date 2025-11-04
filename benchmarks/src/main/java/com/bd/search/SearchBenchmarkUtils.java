@@ -69,7 +69,7 @@ public class SearchBenchmarkUtils {
             }
             
             // Step 3: Get test books for component testing
-            List<Book> allBooks = searchService.search("the", null, null, null);
+            List<Book> allBooks = searchService.search("love", null, null, null);
             List<Book> testBooks = allBooks != null && !allBooks.isEmpty() 
                 ? allBooks.stream().limit(50).collect(Collectors.toList())
                 : new ArrayList<>();
@@ -107,7 +107,7 @@ public class SearchBenchmarkUtils {
      * Finds a book with valid metadata that has a corresponding index file
      */
     private static Book findValidMetadataCombination(SearchService searchService) {
-        List<Book> allBooks = searchService.search("the", null, null, null);
+        List<Book> allBooks = searchService.search("love", null, null, null);
         
         if (allBooks != null) {
             // Sort books by ID for deterministic order
@@ -117,6 +117,7 @@ public class SearchBenchmarkUtils {
                 if (hasValidMetadata(book)) {
                     // Check if index file exists for this book - try multiple possible paths
                     String[] possiblePaths = {
+                        "./data_repository/indexes/index_" + book.getBook_id() + ".json",
                         "../data_repository/indexes/index_" + book.getBook_id() + ".json",
                         "../indexing_service/data_repository/indexes/index_" + book.getBook_id() + ".json"
                     };
@@ -131,7 +132,7 @@ public class SearchBenchmarkUtils {
                     
                     if (indexExists) {
                         // Test if this combination returns results
-                        List<Book> testResults = searchService.search("the", book.getAuthor(), book.getLanguage(), book.getYear());
+                        List<Book> testResults = searchService.search("love", book.getAuthor(), book.getLanguage(), book.getYear());
                         if (testResults != null && !testResults.isEmpty()) {
                             return book;
                         }
@@ -159,6 +160,7 @@ public class SearchBenchmarkUtils {
         try {
             // Try multiple possible paths for the index file
             String[] possiblePaths = {
+                "./data_repository/indexes/index_" + bookId + ".json",
                 "../data_repository/indexes/index_" + bookId + ".json",
                 "../indexing_service/data_repository/indexes/index_" + bookId + ".json"
             };
