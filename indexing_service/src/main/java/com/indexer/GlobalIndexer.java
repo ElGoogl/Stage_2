@@ -13,7 +13,7 @@ import java.util.*;
  * GlobalIndexer merges all individual per-book indexes (index_XXXX.json)
  * into one unified inverted index (inverted_index.json).
  *
- * Now supports token entries with {book_id, count}.
+ * Supports token entries with {book_id, count}.
  */
 public class GlobalIndexer {
 
@@ -23,25 +23,45 @@ public class GlobalIndexer {
 
     /**
      * Reads all per-book index files and merges them into one global index.
-     * The new structure includes counts per book.
+     * Ensures that required directories and files exist.
      */
     public Map<String, Map<String, List<Map<String, Object>>>> buildGlobalIndex() {
         Map<String, Map<String, List<Map<String, Object>>>> globalIndex = new TreeMap<>();
 
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(INDEX_DIR, "index_*.json")) {
-            for (Path file : stream) {
-                System.out.println("[GLOBAL] Reading " + file.getFileName());
+        try {
+            // Ensure that index directory exists
+            Files.createDirectories(INDEX_DIR);
 
-                Map<String, Map<String, List<Map<String, Object>>>> localIndex = gson.fromJson(
-                        new FileReader(file.toFile()),
-                        new TypeToken<Map<String, Map<String, List<Map<String, Object>>>>>() {}.getType()
-                );
-
-                mergeIndexes(globalIndex, localIndex);
+            // Ensure that the global index file exists (create empty one if needed)
+            if (!Files.exists(GLOBAL_INDEX_FILE)) {
+                Files.createFile(GLOBAL_INDEX_FILE);
+                Files.writeString(GLOBAL_INDEX_FILE, "{}");
+                System.out.println("[GLOBAL] Created new empty global index file.");
             }
 
-            Files.writeString(GLOBAL_INDEX_FILE, gson.toJson(globalIndex));
-            System.out.println("[GLOBAL] Combined index written to " + GLOBAL_INDEX_FILE);
+            // Read all local index files
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(INDEX_DIR, "index_*.json")) {
+                boolean foundFiles = false;
+
+                for (Path file : stream) {
+                    foundFiles = true;
+                    System.out.println("[GLOBAL] Reading " + file.getFileName());
+
+                    Map<String, Map<String, List<Map<String, Object>>>> localIndex = gson.fromJson(
+                            new FileReader(file.toFile()),
+                            new TypeToken<Map<String, Map<String, List<Map<String, Object>>>>>() {}.getType()
+                    );
+
+                    mergeIndexes(globalIndex, localIndex);
+                }
+
+                if (foundFiles) {
+                    Files.writeString(GLOBAL_INDEX_FILE, gson.toJson(globalIndex));
+                    System.out.println("[GLOBAL] Combined index written to " + GLOBAL_INDEX_FILE);
+                } else {
+                    System.out.println("[GLOBAL] No local index files found in " + INDEX_DIR);
+                }
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -51,7 +71,7 @@ public class GlobalIndexer {
     }
 
     /**
-     * Merge a local index (with {book_id, count}) into the global one.
+     * Merges a local index (with {book_id, count}) into the global one.
      */
     private void mergeIndexes(Map<String, Map<String, List<Map<String, Object>>>> global,
                               Map<String, Map<String, List<Map<String, Object>>>> local) {
@@ -74,17 +94,17 @@ public class GlobalIndexer {
                     int bookId = ((Number) localBook.get("book_id")).intValue();
                     int localCount = ((Number) localBook.get("count")).intValue();
 
-                    // Prüfen, ob Buch bereits vorhanden ist
+                    // Check if this book already exists in the global entry
                     Optional<Map<String, Object>> existingEntry = globalBookEntries.stream()
                             .filter(e -> ((Number) e.get("book_id")).intValue() == bookId)
                             .findFirst();
 
                     if (existingEntry.isPresent()) {
-                        // Buch existiert → count addieren
+                        // Add count if book already exists
                         int existingCount = ((Number) existingEntry.get().get("count")).intValue();
                         existingEntry.get().put("count", existingCount + localCount);
                     } else {
-                        // Neues Buch hinzufügen
+                        // Add new book entry
                         Map<String, Object> newEntry = new LinkedHashMap<>();
                         newEntry.put("book_id", bookId);
                         newEntry.put("count", localCount);

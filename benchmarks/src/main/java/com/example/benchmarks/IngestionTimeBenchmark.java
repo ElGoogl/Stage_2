@@ -1,24 +1,25 @@
 package com.example.benchmarks;
 
+import com.example.crawler.Downloader;
 import org.openjdk.jmh.annotations.*;
+
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
-import com.example.crawler.Downloader;
 
 /**
- * Measures ingestion throughput for workloads of different sizes
+ * Benchmark measuring ingestion time for different batch sizes.
+ * Each benchmark method measures the time to ingest a specific number of books.
  */
-@BenchmarkMode(Mode.Throughput)
-@OutputTimeUnit(TimeUnit.SECONDS)
-@Warmup(iterations = 3, time = 1)
+@BenchmarkMode(Mode.AverageTime)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@Warmup(iterations = 2, time = 1)
 @Measurement(iterations = 5, time = 2)
 @Fork(1)
 @State(Scope.Benchmark)
-public class IngestionBenchmark {
+public class IngestionTimeBenchmark {
 
     private static final Path DATA_DIR = Path.of("benchmark_datalake");
     private int nextBookId = 1342;
-
     private static final int MAX_ID = 1400;
 
     private int getNextBookId() {
@@ -26,18 +27,13 @@ public class IngestionBenchmark {
         return nextBookId++;
     }
 
-    /**
-     * 1 book ingestion test
-     */
+    /** Measure time for ingesting 1 book */
     @Benchmark
-    public boolean ingest1Book() {
-        int id = getNextBookId();
-        return Downloader.downloadAndSave(id, DATA_DIR);
+    public void ingest1Book() {
+        Downloader.downloadAndSave(getNextBookId(), DATA_DIR);
     }
 
-    /**
-     * 5 books ingestion test
-     */
+    /** Measure time for ingesting 5 books */
     @Benchmark
     public void ingest5Books() {
         for (int i = 0; i < 5; i++) {
@@ -45,9 +41,7 @@ public class IngestionBenchmark {
         }
     }
 
-    /**
-     * 10 books ingestion test
-     */
+    /** Measure time for ingesting 10 books */
     @Benchmark
     public void ingest10Books() {
         for (int i = 0; i < 10; i++) {
@@ -55,9 +49,7 @@ public class IngestionBenchmark {
         }
     }
 
-    /**
-     * 50 books ingestion test
-     */
+    /** Measure time for ingesting 50 books */
     @Benchmark
     public void ingest50Books() {
         for (int i = 0; i < 50; i++) {

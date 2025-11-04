@@ -10,7 +10,7 @@ import java.util.Map;
  *
  * Endpoints (as defined in Stage 2 project hints §4.2):
  *  POST /index/update/{book_id}   → Index one specific book
- *  POST /index/rebuild            → Rebuild full global index
+ *  POST /index/rebuild            → Index all books and rebuild the global index
  *  GET  /index/status             → Return indexing statistics
  *  GET  /status                   → Health check
  */
@@ -22,15 +22,6 @@ public class IndexApp {
         IndexService indexService = new IndexService();
         GlobalIndexer globalIndexer = new GlobalIndexer();
 
-        // --- Optional local test: manual single-book indexing ---
-        boolean runLocalTest = true; // set to false when using the Control Module
-
-        if (runLocalTest) {
-            System.out.println("[DEBUG] Running local indexing test for book 1342...");
-            Map<String, Object> result42 = indexService.buildIndex(1342);
-            System.out.println("[DEBUG] Manual test result: " + result42);
-        }
-
         // --- Start Javalin server ---
         Javalin app = Javalin.create(config -> {
             config.jsonMapper(new JavalinJackson());
@@ -39,33 +30,81 @@ public class IndexApp {
 
         System.out.println("[INDEXER] Service started on http://localhost:7002");
 
-        //  GET /status → Health check
+        // ----------------------------------------------------------
+        // GET /status → Health check
+        // ----------------------------------------------------------
         app.get("/status", ctx -> ctx.json(Map.of(
                 "service", "indexing_service",
                 "status", "running"
         )));
 
+        // ----------------------------------------------------------
         // POST /index/update/{book_id}
-        //     → Index one specific book
+        // → Index one specific book
+        // ----------------------------------------------------------
         app.post("/index/update/{book_id}", ctx -> {
             int bookId = Integer.parseInt(ctx.pathParam("book_id"));
             Map<String, Object> result = indexService.buildIndex(bookId);
+
+            // After successful indexing, rebuild global index automatically
+            if ("indexed".equals(result.get("status"))) {
+                globalIndexer.buildGlobalIndex();
+                System.out.println("[INDEXER] Global index automatically rebuilt after book " + bookId);
+            }
+
             ctx.json(result);
         });
 
+        // ----------------------------------------------------------
         // POST /index/rebuild
-        //     → Rebuild global inverted index
+        // → Index all books in datalake and rebuild the global index
+        // ----------------------------------------------------------
         app.post("/index/rebuild", ctx -> {
-            globalIndexer.buildGlobalIndex();
-            ctx.json(Map.of(
-                    "status", "ok",
-                    "message", "Global index rebuilt successfully",
-                    "path", "data_repository/inverted_index.json"
-            ));
+            System.out.println("[INDEXER] Starting full rebuild of all books...");
+
+            int indexedCount = 0;
+            java.nio.file.Path datalake = java.nio.file.Paths.get("data_repository/datalake_v1/");
+
+            try (java.nio.file.DirectoryStream<java.nio.file.Path> stream =
+                         java.nio.file.Files.newDirectoryStream(datalake, "*.json")) {
+
+                for (java.nio.file.Path file : stream) {
+                    String filename = file.getFileName().toString();
+                    int bookId = Integer.parseInt(filename.replace(".json", ""));
+                    Map<String, Object> result = indexService.buildIndex(bookId);
+
+                    if ("indexed".equals(result.get("status")) || "already_indexed".equals(result.get("status"))) {
+                        indexedCount++;
+                        System.out.println("[INDEXER] Indexed book " + bookId + " successfully.");
+                    } else {
+                        System.out.println("[INDEXER] Skipped or failed: " + bookId + " (" + result.get("status") + ")");
+                    }
+                }
+
+                // After processing all books, build the global index
+                globalIndexer.buildGlobalIndex();
+                System.out.println("[INDEXER] Global index rebuilt successfully after processing " + indexedCount + " books.");
+
+                ctx.json(Map.of(
+                        "status", "ok",
+                        "message", "Full rebuild completed",
+                        "books_processed", indexedCount,
+                        "path", "data_repository/inverted_index.json"
+                ));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                ctx.json(Map.of(
+                        "status", "error",
+                        "message", e.getMessage()
+                ));
+            }
         });
 
+        // ----------------------------------------------------------
         // GET /index/status
-        //     → Return indexing statistics
+        // → Return indexing statistics
+        // ----------------------------------------------------------
         app.get("/index/status", ctx -> {
             int booksIndexed = indexService.getIndexedCount();
             ctx.json(Map.of(
