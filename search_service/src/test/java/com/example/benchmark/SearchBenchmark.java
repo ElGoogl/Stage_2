@@ -1,7 +1,7 @@
 package com.example.benchmark;
 
-import com.example.search.SearchService;
-import com.example.search.Book;
+import com.bd.search.SearchService;
+import com.bd.search.Book;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 
