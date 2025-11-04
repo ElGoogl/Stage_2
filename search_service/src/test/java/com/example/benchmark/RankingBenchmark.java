@@ -1,8 +1,8 @@
 package com.example.benchmark;
 
-import com.example.search.RankingService;
-import com.example.search.Book;
-import com.example.search.RankedBook;
+import com.bd.search.RankingService;
+import com.bd.search.Book;
+import com.bd.search.RankedBook;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 
