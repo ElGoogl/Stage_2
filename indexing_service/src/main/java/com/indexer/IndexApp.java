@@ -45,13 +45,19 @@ public class IndexApp {
                 "status", "running"
         )));
 
-        // POST /index/update/{book_id}
-        //     → Index one specific book
         app.post("/index/update/{book_id}", ctx -> {
             int bookId = Integer.parseInt(ctx.pathParam("book_id"));
             Map<String, Object> result = indexService.buildIndex(bookId);
+
+            // --- After successful indexing, rebuild the global index ---
+            if ("indexed".equals(result.get("status"))) {
+                globalIndexer.buildGlobalIndex();
+                System.out.println("[INDEXER] Global index automatically rebuilt after book " + bookId);
+            }
+
             ctx.json(result);
         });
+
 
         // POST /index/rebuild
         //     → Rebuild global inverted index
