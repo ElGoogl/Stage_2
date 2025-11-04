@@ -1,5 +1,8 @@
 package com.example.search;
 
+import com.bd.search.DatabaseConfig;
+import com.bd.search.SearchService;
+
 public class SearchServiceTest {
     
     public static void main(String[] args) {
