@@ -1682,12 +1682,6 @@
     ]
   },
   "A": {
-    "a": [
-      {
-        "book_id": 1342,
-        "count": 2036
-      }
-    ],
     "a_": [
       {
         "book_id": 1342,
@@ -3362,12 +3356,6 @@
         "count": 5
       }
     ],
-    "an": [
-      {
-        "book_id": 1342,
-        "count": 378
-      }
-    ],
     "ancient": [
       {
         "book_id": 1342,
@@ -3384,12 +3372,6 @@
       {
         "book_id": 1342,
         "count": 2
-      }
-    ],
-    "and": [
-      {
-        "book_id": 1342,
-        "count": 3764
       }
     ],
     "and_": [
@@ -3980,12 +3962,6 @@
         "count": 2
       }
     ],
-    "are": [
-      {
-        "book_id": 1342,
-        "count": 368
-      }
-    ],
     "argemone": [
       {
         "book_id": 1342,
@@ -4188,12 +4164,6 @@
       {
         "book_id": 1342,
         "count": 4
-      }
-    ],
-    "as": [
-      {
-        "book_id": 1342,
-        "count": 1228
       }
     ],
     "ascended": [
@@ -4452,12 +4422,6 @@
       {
         "book_id": 1342,
         "count": 30
-      }
-    ],
-    "at": [
-      {
-        "book_id": 1342,
-        "count": 816
       }
     ],
     "ate": [
@@ -5120,12 +5084,6 @@
       {
         "book_id": 1342,
         "count": 1
-      }
-    ],
-    "be": [
-      {
-        "book_id": 1342,
-        "count": 1263
       }
     ],
     "bear": [
@@ -6496,12 +6454,6 @@
         "count": 1
       }
     ],
-    "but": [
-      {
-        "book_id": 1342,
-        "count": 1036
-      }
-    ],
     "butcher": [
       {
         "book_id": 1342,
@@ -6524,12 +6476,6 @@
       {
         "book_id": 1342,
         "count": 1
-      }
-    ],
-    "by": [
-      {
-        "book_id": 1342,
-        "count": 699
       }
     ],
     "bye": [
@@ -16590,12 +16536,6 @@
         "count": 1
       }
     ],
-    "for": [
-      {
-        "book_id": 1342,
-        "count": 1092
-      }
-    ],
     "for_": [
       {
         "book_id": 1342,
@@ -19746,12 +19686,6 @@
         "count": 2
       }
     ],
-    "if": [
-      {
-        "book_id": 1342,
-        "count": 366
-      }
-    ],
     "ignorance": [
       {
         "book_id": 1342,
@@ -20248,12 +20182,6 @@
       {
         "book_id": 1342,
         "count": 1
-      }
-    ],
-    "in": [
-      {
-        "book_id": 1342,
-        "count": 1991
       }
     ],
     "in_": [
@@ -21570,12 +21498,6 @@
         "count": 1
       }
     ],
-    "into": [
-      {
-        "book_id": 1342,
-        "count": 145
-      }
-    ],
     "intolerable": [
       {
         "book_id": 1342,
@@ -21868,18 +21790,6 @@
       {
         "book_id": 1342,
         "count": 3
-      }
-    ],
-    "is": [
-      {
-        "book_id": 1342,
-        "count": 922
-      }
-    ],
-    "it": [
-      {
-        "book_id": 1342,
-        "count": 1588
       }
     ],
     "italian": [
@@ -25750,12 +25660,6 @@
         "count": 2
       }
     ],
-    "no": [
-      {
-        "book_id": 1342,
-        "count": 509
-      }
-    ],
     "noble": [
       {
         "book_id": 1342,
@@ -25874,12 +25778,6 @@
       {
         "book_id": 1342,
         "count": 1
-      }
-    ],
-    "not": [
-      {
-        "book_id": 1342,
-        "count": 1492
       }
     ],
     "notable": [
@@ -26382,12 +26280,6 @@
         "count": 3
       }
     ],
-    "of": [
-      {
-        "book_id": 1342,
-        "count": 3840
-      }
-    ],
     "of_": [
       {
         "book_id": 1342,
@@ -26544,12 +26436,6 @@
         "count": 1
       }
     ],
-    "on": [
-      {
-        "book_id": 1342,
-        "count": 734
-      }
-    ],
     "once": [
       {
         "book_id": 1342,
@@ -26668,12 +26554,6 @@
       {
         "book_id": 1342,
         "count": 1
-      }
-    ],
-    "or": [
-      {
-        "book_id": 1342,
-        "count": 325
       }
     ],
     "ordained": [
@@ -36554,12 +36434,6 @@
         "count": 1
       }
     ],
-    "such": [
-      {
-        "book_id": 1342,
-        "count": 393
-      }
-    ],
     "sudden": [
       {
         "book_id": 1342,
@@ -37642,22 +37516,10 @@
         "count": 14
       }
     ],
-    "that": [
-      {
-        "book_id": 1342,
-        "count": 1605
-      }
-    ],
     "that_": [
       {
         "book_id": 1342,
         "count": 1
-      }
-    ],
-    "the": [
-      {
-        "book_id": 1342,
-        "count": 4656
       }
     ],
     "the_": [
@@ -37684,12 +37546,6 @@
         "count": 1
       }
     ],
-    "their": [
-      {
-        "book_id": 1342,
-        "count": 452
-      }
-    ],
     "theirs": [
       {
         "book_id": 1342,
@@ -37708,22 +37564,10 @@
         "count": 34
       }
     ],
-    "then": [
-      {
-        "book_id": 1342,
-        "count": 175
-      }
-    ],
     "thence": [
       {
         "book_id": 1342,
         "count": 1
-      }
-    ],
-    "there": [
-      {
-        "book_id": 1342,
-        "count": 367
       }
     ],
     "thereby": [
@@ -37748,18 +37592,6 @@
       {
         "book_id": 1342,
         "count": 2
-      }
-    ],
-    "these": [
-      {
-        "book_id": 1342,
-        "count": 78
-      }
-    ],
-    "they": [
-      {
-        "book_id": 1342,
-        "count": 606
       }
     ],
     "thin": [
@@ -37826,12 +37658,6 @@
       {
         "book_id": 1342,
         "count": 3
-      }
-    ],
-    "this": [
-      {
-        "book_id": 1342,
-        "count": 459
       }
     ],
     "thither": [
@@ -38102,12 +37928,6 @@
       {
         "book_id": 1342,
         "count": 2
-      }
-    ],
-    "to": [
-      {
-        "book_id": 1342,
-        "count": 4323
       }
     ],
     "together": [
@@ -40762,12 +40582,6 @@
         "count": 1
       }
     ],
-    "was": [
-      {
-        "book_id": 1342,
-        "count": 1871
-      }
-    ],
     "was_": [
       {
         "book_id": 1342,
@@ -41302,12 +41116,6 @@
         "count": 4
       }
     ],
-    "will": [
-      {
-        "book_id": 1342,
-        "count": 421
-      }
-    ],
     "willed": [
       {
         "book_id": 1342,
@@ -41456,12 +41264,6 @@
       {
         "book_id": 1342,
         "count": 7
-      }
-    ],
-    "with": [
-      {
-        "book_id": 1342,
-        "count": 1102
       }
     ],
     "withdrawing": [
