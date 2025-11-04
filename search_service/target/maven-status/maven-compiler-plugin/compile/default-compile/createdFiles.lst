@@ -1,8 +1,6 @@
-com/example/search/APISpecificationDemo.class
-com/example/search/SearchService.class
-com/example/search/DatabaseConnectionTest.class
-com/example/search/RankedBook.class
-com/example/search/RankingService.class
-com/example/search/Book.class
-com/example/search/App.class
-com/example/search/DatabaseConfig.class
+com/bd/search/RankedBook.class
+com/bd/search/Book.class
+com/bd/search/SearchService.class
+com/bd/search/RankingService.class
+com/bd/search/DatabaseConfig.class
+com/bd/search/App.class

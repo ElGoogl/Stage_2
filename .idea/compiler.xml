@@ -9,6 +9,7 @@
         <module name="control_module" />
         <module name="benchmarks" />
         <module name="indexing_service" />
+        <module name="search-service" />
         <module name="ingestion_service" />
       </profile>
     </annotationProcessing>
