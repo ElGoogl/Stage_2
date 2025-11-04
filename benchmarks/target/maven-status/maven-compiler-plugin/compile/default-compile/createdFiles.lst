@@ -1,7 +1,0 @@
-com/bd/benchmarks/RankingBenchmark.class
-com/example/benchmarks/IngestionCPUAndMem.class
-com/example/benchmarks/IngestionBenchmark.class
-com/example/benchmarks/IngestionTimeBenchmark.class
-com/bd/benchmarks/DataProcessingBenchmark.class
-com/bd/benchmarks/SearchBenchmark.class
-com/control/ControlPipelineBenchmark.class
